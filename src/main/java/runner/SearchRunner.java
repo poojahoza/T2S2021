@@ -1,29 +1,21 @@
 package main.java.runner;
 
 
-import main.java.clustering.ClusteringRanker;
+
 import main.java.commandparser.CommandParser;
 import main.java.commandparser.RegisterCommands;
 import main.java.commandparser.ValidateCommands;
 import main.java.containers.Container;
 //import main.java.dbpedia.DBpedia;
-import main.java.mrf.MarkovRandomField;
-import main.java.queryexp.*;
-import main.java.queryexp.rm3.RelevanceModel3;
-import main.java.reranker.ReRanker;
-import main.java.rerankerv2.docsimranker.DocumentFrequencySimilarity;
-import main.java.rerankerv2.docsimranker.EntitySimilarityRanker;
 import main.java.searcher.BaseBM25;
 import main.java.utils.*;
 import main.java.searcher.PageSearcher;
 import main.java.searcher.LeadtextSearcher;
 import main.java.graph.GraphSimConstructor;
 import main.java.graph.GraphDegreeConstructor;
-import main.java.wordsimilarityranker.*;
 //import main.java.queryexpansion.QueryExpansion;
 import main.java.entityrelation.FeatureGenerator;
 import main.java.entityrelation.QueryExapansion;
-import main.java.wrapper.QueryExpansionReRanking;
 
 
 import java.io.IOException;
@@ -82,13 +74,6 @@ public class SearchRunner implements ProgramRunner
             String mname= "BM_25"+level+datafile;
 
             RunWriter.writeRunFile(mname,res);
-        }
-
-        if(searchParser.isReRankEnabled())
-        {
-            validate.ValidateReRank();
-            ReRanker re = new ReRanker(searchParser,queryCBOR);
-            re.ReRank();
         }
 
 
@@ -287,7 +272,7 @@ public class SearchRunner implements ProgramRunner
         }
 
 
-        if(searchParser.isQe_entity_degree_rerankingEnabled()) {
+        /*if(searchParser.isQe_entity_degree_rerankingEnabled()) {
             validate.ValidateEntityDegree();
             validate.ValidateReRank();
 
@@ -320,7 +305,7 @@ public class SearchRunner implements ProgramRunner
                         io.getStackTrace();
             }
 
-         }
+         }*/
        }
     }
 
