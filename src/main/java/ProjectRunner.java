@@ -25,12 +25,6 @@ public class ProjectRunner
             } else if (parser.getParser().getParsedCommand().equals("search")) {
                 runner = new SearchRunner(parser);
                 runner.run();
-            } else if (parser.getParser().getParsedCommand().equals("indexHamSpam")) {
-                runner = new IndexHamSpamRunner(parser);
-                runner.run();
-            } else if (parser.getParser().getParsedCommand().equals("ranker")) {
-                runner = new RankerRunner(parser);
-                runner.run();
             } else {
                 parser.getParser().usage();
             }

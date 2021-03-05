@@ -91,53 +91,6 @@ public class SearchRunner implements ProgramRunner
             re.ReRank();
         }
 
-        if(searchParser.isIDFReRankEnabled())
-        {
-            validate.ValidateReRank();
-            ReRanker re = new ReRanker(searchParser,queryCBOR);
-            re.ReRankIDF();
-        }
-
-        if(searchParser.isDFReRankEnabled())
-        {
-
-            validate.ValidateReRank();
-//            ReRanker re = new ReRanker(searchParser,queryCBOR);
-//            re.ReRankDF();
-
-            DocumentFrequencySimilarity df = new DocumentFrequencySimilarity(searchParser,queryCBOR);
-            df.doDocumentFrequency();
-        }
-
-        if(searchParser.isCosineSimilarityEnabled())
-        {
-            CosineSimilarity cosineSimilarity = new CosineSimilarity(searchParser,queryCBOR);
-            cosineSimilarity.doCosine();
-        }
-
-        if(searchParser.isJaccardSimilarityEnabled())
-        {
-            JaccardSimilarity jaccardSimilarity = new JaccardSimilarity(searchParser,queryCBOR);
-            jaccardSimilarity.doJaccard();
-        }
-
-        if(searchParser.isJaroSimilarityEnabled())
-        {
-            JaroWinklerSim jaroWinkler = new JaroWinklerSim(searchParser,queryCBOR);
-            jaroWinkler.doJaroWinkler();
-        }
-
-        if(searchParser.isDiceEnabled())
-        {
-            SorensenDiceCoefficient sorensenDiceCoefficient = new SorensenDiceCoefficient(searchParser,queryCBOR);
-            sorensenDiceCoefficient.doSorsenCoff();
-        }
-
-        if(searchParser.isLevenSimEnabled())
-        {
-            NormalizedLevenshteinSimilarity normalizedLevenshteinSimilarity = new NormalizedLevenshteinSimilarity(searchParser,queryCBOR);
-            normalizedLevenshteinSimilarity.doNormalizedLevenshtein();
-        }
 
         if(searchParser.isEntityFreqEnabled()){
             validate.ValidateEntityDegree();
@@ -167,129 +120,6 @@ public class SearchRunner implements ProgramRunner
                 System.out.println(ioe.getMessage());
             }
 
-        }
-
-        if(searchParser.isEntityDegreeEnabled()){
-            validate.ValidateEntityDegree();
-            try {
-                Map<String,String> querysecCBOR = SearchUtils.readOutlineSectionPath(searchParser.getQueryfile());
-
-                BaseBM25 bm25 = new BaseBM25(searchParser.getkVAL(), searchParser.getIndexlocation());
-                Map<String, Map<String, Container>> bm25_ranking = bm25.getRanking(querysecCBOR);
-
-                Entities e = new Entities();
-                Map<String, Map<String, String>> query_ent_list = e.getEntitiesPerQuery(bm25_ranking);
-
-                PageSearcher pgs = new PageSearcher(searchParser.getEntityIndLoc());
-                Map<String, Map<String, String>> query_entities = pgs.getRanking(query_ent_list);
-
-                GraphDegreeConstructor gdc = new GraphDegreeConstructor();
-                Map<String, Map<String, Integer>> ranked_entities = gdc.getGraphDegree(query_entities);
-
-                Map<String, Map<String, Double>> ranked_entities_score = e.getParagraphsScore(bm25_ranking, ranked_entities);
-                ranked_entities_score = e.getRerankedParas(ranked_entities_score);
-
-                WriteFile write_file = new WriteFile();
-                String level = searchParser.isArticleEnabled()? "_article": "_section";
-                String datafile ="";
-                if(searchParser.getQueryfile().toLowerCase().contains("test".toLowerCase()))
-                {
-                    datafile = "_test";
-                }
-                else if(searchParser.getQueryfile().toLowerCase().contains("train".toLowerCase()))
-                {
-                    datafile = "_train";
-                }
-                write_file.generateEntityRunFile(ranked_entities_score, "entityDegree"+level+datafile);
-
-            }catch (IOException ioe){
-                System.out.println(ioe.getMessage());
-            }
-        }
-        if(searchParser.isEntitySimEnabled()){
-            validate.ValidateEntitySim();
-            try {
-                Map<String,String> querysecCBOR = SearchUtils.readOutlineSectionPath(searchParser.getQueryfile());
-
-                BaseBM25 bm25 = new BaseBM25(searchParser.getkVAL(), searchParser.getIndexlocation());
-                Map<String, Map<String, Container>> bm25_ranking = bm25.getRanking(querysecCBOR);
-
-                Entities e = new Entities();
-                Map<String, Map<String, String>> query_ent_list = e.getEntitiesPerQuery(bm25_ranking);
-
-                LeadtextSearcher gs = new LeadtextSearcher(searchParser.getEntityIndLoc());
-                Map<String, Map<String, String>> query_entities = gs.getRanking(query_ent_list);
-
-                GraphSimConstructor gdc = new GraphSimConstructor();
-                Map<String, Map<String, Double>> ranked_entities = gdc.getGraphDegree(query_entities,
-                        searchParser.getDimension(),
-                        searchParser.getWordEmbeddingFile());
-
-
-                Map<String, Map<String, Double>> ranked_entities_score = e.getParagraphsScoreDouble(bm25_ranking, ranked_entities);
-                ranked_entities_score = e.getRerankedParas(ranked_entities_score);
-
-                WriteFile write_file = new WriteFile();
-                String level = searchParser.isArticleEnabled()? "_article": "_section";
-                String datafile ="";
-                if(searchParser.getQueryfile().toLowerCase().contains("test".toLowerCase()))
-                {
-                    datafile = "_test";
-                }
-                else if(searchParser.getQueryfile().toLowerCase().contains("train".toLowerCase()))
-                {
-                    datafile = "_train";
-                }
-                write_file.generateEntityRunFile(ranked_entities_score, "entitySim"+level+datafile);
-
-            }catch (IOException ioe){
-                System.out.println(ioe.getMessage());
-            }
-
-
-        }
-        if(searchParser.isQueryExpand()){
-            validate.ValidateEntityDegree();
-            try {
-                Map<String,String> querysecCBOR = SearchUtils.readOutlineSectionPath(searchParser.getQueryfile());
-
-                BaseBM25 bm25 = new BaseBM25(searchParser.getkVAL(), searchParser.getIndexlocation());
-                Map<String, Map<String, Container>> bm25_ranking = bm25.getRanking(querysecCBOR);
-
-                Entities e = new Entities();
-                Map<String, Map<String, String>> query_ent_list = e.getEntitiesPerQuery(bm25_ranking);
-
-                PageSearcher pgs = new PageSearcher(searchParser.getEntityIndLoc());
-                Map<String, Map<String, String>> query_entities = pgs.getRanking(query_ent_list);
-
-                GraphDegreeConstructor gdc = new GraphDegreeConstructor();
-                Map<String, Map<String, Integer>> ranked_entities = gdc.getGraphDegree(query_entities);
-
-                Map<String, Map<String, Double>> ranked_entities_score = e.getParagraphsScore(bm25_ranking, ranked_entities);
-                ranked_entities_score = e.getRerankedParas(ranked_entities_score);
-
-                Map<String, String> expanded_query = e.expandQuery(querysecCBOR, ranked_entities_score);
-
-                //BaseBM25 bm25 = new BaseBM25(100, searchParser.getIndexlocation());
-                Map<String, Map<String, Container>> expanded_bm25_ranking = bm25.getRanking(expanded_query);
-
-                WriteFile write_file = new WriteFile();
-                String level = searchParser.isArticleEnabled()? "_article": "_section";
-                String datafile ="";
-                if(searchParser.getQueryfile().toLowerCase().contains("test".toLowerCase()))
-                {
-                    datafile = "_test";
-                }
-                else if(searchParser.getQueryfile().toLowerCase().contains("train".toLowerCase()))
-                {
-                    datafile = "_train";
-                }
-                write_file.generateBM25RunFile(expanded_bm25_ranking, "expandedBM25"+level+datafile);
-                //write_file.generateEntityRunFile(ranked_entities_score, "entityDegree");
-
-            }catch (IOException ioe){
-                System.out.println(ioe.getMessage());
-            }
         }
 
         if(searchParser.isEcmExpandEnabled()){
@@ -450,90 +280,12 @@ public class SearchRunner implements ProgramRunner
                 ioe.printStackTrace();
             }
         }
-        if(searchParser.isEntityCentroidEnabled()){
-            validate.ValidateEntityCentroid();
-
-            try {
-                FeatureGenerator featureGenerator = new FeatureGenerator();
-                Map<String, Map<String, Double>> query_entity_scores = featureGenerator.generateAverageCentroidVector(searchParser.getFeaturevectorfile());
-                //System.out.println(query_entity_scores);
-                String level = searchParser.isArticleEnabled()? "_article": "_section";
-                String datafile ="";
-                if(searchParser.getQueryfile().toLowerCase().contains("test".toLowerCase()))
-                {
-                    datafile = "_test";
-                }
-                else if(searchParser.getQueryfile().toLowerCase().contains("train".toLowerCase()))
-                {
-                    datafile = "_train";
-                }
-                WriteFile write_file = new WriteFile();
-                write_file.generateEntityRunFile(query_entity_scores, "entity_avg_centroid"+level+datafile);
-
-                BaseBM25 bm25 = new BaseBM25(searchParser.getkVAL(), searchParser.getIndexlocation());
-                Map<String, Map<String, Container>> bm25_ranking = bm25.getRanking(queryCBOR);
-
-                Entities e = new Entities();
-                Map<String, Map<String, Double>> ranked_entities_score = e.getParagraphsScoreDouble(bm25_ranking, query_entity_scores);
-                ranked_entities_score = e.getRerankedParas(ranked_entities_score);
-
-                write_file.generateEntityRunFile(ranked_entities_score, "paragraph_avg_centroid"+level+datafile);
-
-            }catch (IOException ioe){
-                ioe.printStackTrace();
-            }
-        }
-
-//        if(searchParser.isQEEnabled())
-//        {
-//            validate.ValidateQE();
-//            QueryExpansion qe = new QueryExpansion(searchParser,queryCBOR);
-//            qe.doQueryExpansion();
-//
-//        }
-//
-//        if(searchParser.isExistinDBpedia())
-//        {
-//            DBpedia qe = new DBpedia(searchParser,queryCBOR);
-//            qe.retriveExistanceinDBpeda(searchParser.isDBpediaContain());
-//        }
-
-
-        if(searchParser.isEntityDocSimEnabled())
-        {
-
-            EntitySimilarityRanker ent = new EntitySimilarityRanker(searchParser,queryCBOR);
-            ent.doEntityReRank();
-        }
-
-        if(searchParser.isMrfEnabled())
-        {
-            MarkovRandomField mrf = new MarkovRandomField(searchParser,queryCBOR);
-            mrf.doMarkovRandomField();
-        }
-
-        if(searchParser.isClusterRankerEnabled())
-        {
-            ClusteringRanker cr = new ClusteringRanker(searchParser,queryCBOR);
-            cr.doCluster();
-        }
 
         if(searchParser.getisVerbose())
         {
             PrintUtils.displayQuery(queryCBOR);
         }
 
-//        if(searchParser.is_qe_reranking())
-//        {
-//            validate.ValidateQE();
-//            validate.ValidateReRank();
-//            QueryExpansion qe = new QueryExpansion(searchParser,queryCBOR);
-//            Map<String,Map<String,Container >> res = qe.doQueryExpansion();
-//            QueryExpansionReRanking geReRank = new QueryExpansionReRanking(searchParser,queryCBOR,res);
-//            String mname= "qe_rerank_"+searchParser.getQEType().toString();
-//            geReRank.getDocumentFrequencyReRanking(mname);
-//
-//        }
 
         if(searchParser.isQe_entity_degree_rerankingEnabled()) {
             validate.ValidateEntityDegree();
@@ -569,54 +321,6 @@ public class SearchRunner implements ProgramRunner
             }
 
          }
-
-        if(searchParser.isQueryExDFEnabled())
-        {
-            ExpandQuery exp = new ExpandQueryDF(searchParser,queryCBOR);
-            exp.doQueryExpansion();
-        }
-
-        if(searchParser.isQueryExIDFEnabled())
-        {
-            ExpandQuery exp = new ExpandQueryIDF(searchParser,queryCBOR);
-            exp.doQueryExpansion();
-        }
-
-        if(searchParser.isQueryExpEntityEnabled())
-        {
-            ExpandQuery exp = new ExpandQueryAbstract(searchParser,queryCBOR);
-            exp.doQueryExpansion();
-
-            exp = new ExpandQueryAbstractDF(searchParser,queryCBOR);
-            exp.doQueryExpansion();
-
-        }
-
-        if(searchParser.isQueryExpRm3())
-        {
-            ExpandQuery exp = new RelevanceModel3(searchParser,queryCBOR);
-            exp.doQueryExpansion();
-        }
-
-        if(searchParser.isTestEnabled())
-        {
-            DocumentFrequencySimilarity df = new DocumentFrequencySimilarity(searchParser,queryCBOR);
-            Map<String, Map<String,Container>> res = df.getDocumentFRequencyReRanker();
-
-            ExpandQuery exp = new ExpandQueryDF(searchParser,queryCBOR);
-            exp.doQueryExpansion(res);
-
-            exp = new ExpandQueryIDF(searchParser,queryCBOR);
-            exp.doQueryExpansion(res);
-
-            exp = new ExpandQueryAbstract(searchParser,queryCBOR);
-            exp.doQueryExpansion(res);
-
-            exp = new ExpandQueryAbstractDF(searchParser,queryCBOR);
-            exp.doQueryExpansion(res);
-
-        }
-
        }
     }
 
