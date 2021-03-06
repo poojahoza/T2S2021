@@ -13,7 +13,6 @@ public class CommandParser
     private RegisterCommands.CommandIndex index = null;
     private RegisterCommands.CommandSearch search = null;
     private RegisterCommands.CommandHelp helpc = null;
-    private RegisterCommands.Ranker ranker = null;
     private String[] argslist = null;
 
     public CommandParser(String  ... args)
@@ -22,7 +21,6 @@ public class CommandParser
         search =new RegisterCommands.CommandSearch();
         helpc = new RegisterCommands.CommandHelp();
         argslist = args;
-        ranker = new RegisterCommands.Ranker();
         parse = createParser();
     }
 
@@ -30,7 +28,7 @@ public class CommandParser
     {
         if(parse == null)
         {
-            parse = JCommander.newBuilder().addCommand("index",index).addCommand("search",search).addCommand("indexHamSpam", indexHamSpam).addCommand("--help",helpc).addCommand("ranker",ranker).build();
+            parse = JCommander.newBuilder().addCommand("index",index).addCommand("search",search).addCommand("--help",helpc).build();
             parse.parse(argslist);
         }
         return parse;
@@ -46,11 +44,6 @@ public class CommandParser
     public RegisterCommands.CommandSearch getSearchCommand()
     {
         return search;
-    }
-
-    public RegisterCommands.Ranker getRankerCommand()
-    {
-        return ranker;
     }
 
 }

@@ -231,10 +231,6 @@ public class RegisterCommands
         @Parameter(names = "--test", description = "Only for testing purposes")
         private boolean isTestEnabled = false;
 
-        public boolean isQueryExpRm3() {
-            return isQueryExpRm3;
-        }
-
         public boolean isTestEnabled() {
             return isTestEnabled;
         }
@@ -402,11 +398,6 @@ public class RegisterCommands
 
         boolean isHelp() {
             return help;
-        }
-
-        public static boolean isSpecialCharSpamFilterEnabled()
-        {
-            return isSpecialCharSpamFilterEnabled;
         }
     }
 
