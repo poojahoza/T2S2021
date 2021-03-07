@@ -10,6 +10,7 @@ import main.java.containers.Container;
 import main.java.searcher.BaseBM25;
 import main.java.utils.*;
 import main.java.entityrelation.FeatureGenerator;
+import main.java.entityrelation.RelCoMentionFeatureGenerator;
 import main.java.entityrelation.QueryExapansion;
 import main.java.utils.ReadUtils;
 import main.java.searcher.ParagraphSearcher;
@@ -245,7 +246,10 @@ public class SearchRunner implements ProgramRunner
                 Map<String, Map<String, Integer>> query_ent_list = e.getSortedEntitiesPerQuery(bm25_ranking);
                 Map<String, Map<String, Double[]>> entity_ranking_list = e.readEntityRunFileDetails(searchParser.getEcmentityfile());
 
-                FeatureGenerator featuregenerator = new FeatureGenerator();
+                /*FeatureGenerator featuregenerator = new FeatureGenerator();
+                Map<String, Map<String, Double[]>> featureVectors = featuregenerator.getFeatureVectors(query_ent_list, bm25_ranking, entity_ranking_list);
+                 */
+                RelCoMentionFeatureGenerator featuregenerator = new RelCoMentionFeatureGenerator();
                 Map<String, Map<String, Double[]>> featureVectors = featuregenerator.getFeatureVectors(query_ent_list, bm25_ranking, entity_ranking_list);
                 //Map<String, Map<String, Double[]>> featureVectors = featuregenerator.getNormalizedFeatureVectors(query_ent_list, bm25_ranking, entity_ranking_list);
                 Map<String, Map<String, Double>> hopRelationfeatureVectors = featuregenerator.extractFeatures(featureVectors, 0);
