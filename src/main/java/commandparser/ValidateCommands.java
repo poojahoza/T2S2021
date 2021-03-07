@@ -119,6 +119,30 @@ public class ValidateCommands
                 System.out.println("Please pass the entity run file path");
                 CALLEXIT(-1);
             }
+        }
+
+        public void ValidateEntityRelationWithParaRunFile()
+        {
+            if(searchParser.getEntityIndLoc() == null)
+            {
+                System.out.println("Please pass the entity index location path");
+                CALLEXIT(-1);
+            }
+            if(searchParser.getQrelfile() == null)
+            {
+                System.out.println("Please pass the entity qrel location path");
+                CALLEXIT(-1);
+            }
+            if(searchParser.getEcmentityfile() == null)
+            {
+                System.out.println("Please pass the entity run file path");
+                CALLEXIT(-1);
+            }
+            if(searchParser.getPararunfile() == null)
+            {
+                System.out.println("Please pass the paragraph run file path");
+                CALLEXIT(-1);
+            }
 
         }
 

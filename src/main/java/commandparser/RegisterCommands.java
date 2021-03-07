@@ -94,6 +94,9 @@ public class RegisterCommands
          @Parameter(names = {"-entity-run", "--entity-run"}, description = "Entity run file")
          private String ecmentityfile = null;
 
+         @Parameter(names = {"-para-run", "--paragraph-run"}, description = "Paragraph run file")
+         private String pararunfile = null;
+
 
          @Parameter(names = {"-ecm-qe-num", "--ecm-query-expansion-terms-num"}, description = "ECM  Query Expansion Terms Number")
          private Integer ecmqenum = 20;
@@ -126,42 +129,6 @@ public class RegisterCommands
          @Parameter(names = "--rerank",description ="Rerank the initial retrieved document using document similarity")
          private boolean isReRank =false;
 
-         @Parameter(names = "--bias-fact",description ="Bias factor to get the document representation")
-         private Integer biasFactor = 1;
-
-         @Parameter(names = {"--rerank-idf"},description ="Rerank the document based on the IDF")
-         private boolean isIDFReRank =false;
-
-         @Parameter(names = {"--rerank-df"},description ="Rerank the document based on the DF")
-         private boolean isDFReRank =false;
-
-         @Parameter(names = {"--cosine-sim"},description ="Rerank the document based on the cosine similarity between two strings")
-         private boolean isCosineSimilarity =false;
-
-         @Parameter(names = {"--jaccard-sim"},description ="Rerank the document based on the Jaccard similarity between two strings")
-         private boolean isJaccardSimilarity = false;
-
-         @Parameter(names = {"--jaro-sim"},description ="Rerank the document based on the Jaro Winkler similarity between two strings")
-         private boolean isJaroEnabled = false;
-
-         @Parameter(names = {"--dice-sim"},description ="Rerank the document based on the Sorensen Dice coefficient similarity between two strings")
-         private boolean isDiceEnabled = false;
-
-         @Parameter(names = {"--leven-sim"},description ="Rerank the document based on the NormalizedLevenshtein similarity between two strings")
-         private boolean isLevenSim = false;
-
-         @Parameter(names = {"-dbpedia","--exist-dbpedia"},description ="Find out if an entity exist in dbpedia")
-         private boolean isExistDBpedia =false;
-
-         @Parameter(names = {"-dbpcontain","--dbpedia-contain"},description ="Change the search to contain")
-         private boolean isDBpediaContain =false;
-
-         @Parameter(names = {"-qe","--query-expansion"},description ="Rerank the document using Query expansion")
-         private boolean isQE =false;
-
-         @Parameter(names = {"-qe-type","--query-expansion-type"},description ="Select type of Query expansion (entityText, entityID , entityTextID) ")
-         private qeType qeTypeValue = qeType.entityText;
-
          @Parameter(names = {"-top"},description ="specify the top number of selected entity to used in the Query expansion")
          private int numberOfReturnedEntity = 3;
 
@@ -187,6 +154,9 @@ public class RegisterCommands
 
          @Parameter(names = "--entity-relation",description ="Generate the feature vectors and ranklib model")
          private boolean isEntityRelationEnabled =false;
+
+         @Parameter(names = "--entity-relation-para-run-file",description ="Generate the feature vectors and ranklib model")
+         private boolean isEntityRelationParaRunFileEnabled =false;
 
          @Parameter(names = "--entity-ranklib",description ="Rerank the passages using entity ranklib")
          private boolean isEntityRanklibEnabled =false;
@@ -231,40 +201,6 @@ public class RegisterCommands
         @Parameter(names = "--test", description = "Only for testing purposes")
         private boolean isTestEnabled = false;
 
-        public boolean isTestEnabled() {
-            return isTestEnabled;
-        }
-
-        public boolean isQueryExDFEnabled() {
-            return isQueryExDF;
-        }
-
-        public boolean isQueryExIDFEnabled() {
-            return isQueryExIDF;
-        }
-
-        public boolean isQueryExpEntityEnabled() {
-            return isQueryExpEntity;
-        }
-
-        public boolean is_qe_reranking() {
-            return qe_reranking;
-        }
-
-        public boolean isQe_entity_degree_rerankingEnabled() {
-            return qe_entity_degree_reranking;
-        }
-
-        public String getRanklibPath() {
-            return ranklibpath;
-        }
-
-         public boolean isLevenSimEnabled() {return isLevenSim;}
-         public String getQrelPath()
-         {
-             return qrelPath;
-         }
-         public boolean isParallelEnabled(){return isParallelEnabled;}
          public boolean isArticleEnabled()
          {
              return isArticleEnabled;
@@ -273,24 +209,7 @@ public class RegisterCommands
          {
              return isSectionEnabled;
          }
-         public boolean isExistinDBpedia(){return isExistDBpedia;}
-         public boolean isDBpediaContain() {return isDBpediaContain;}
-         public boolean isQEEnabled(){return isQE;}
-         public qeType getQEType () {return qeTypeValue;}
          public int getNumberOfReturnedEntity() {return numberOfReturnedEntity;}
-
-         public boolean isDiceEnabled() { return isDiceEnabled;}
-         public boolean isJaroSimilarityEnabled(){return isJaroEnabled;}
-         public boolean isJaccardSimilarityEnabled(){return isJaccardSimilarity;}
-
-         public boolean isIDFReRankEnabled()
-         {
-             return isIDFReRank;
-         }
-         public boolean isDFReRankEnabled()
-         {
-             return isDFReRank;
-         }
 
         public String getIndexlocation() {
             return indexlocation;
@@ -308,6 +227,11 @@ public class RegisterCommands
          public String getEcmentityfile()
          {
              return ecmentityfile;
+         }
+
+         public String getPararunfile()
+         {
+             return pararunfile;
          }
 
          public String getFeaturevectorfile()
@@ -345,19 +269,6 @@ public class RegisterCommands
               return isBM25;
           }
 
-          public boolean isCosineSimilarityEnabled() {return isCosineSimilarity;}
-
-
-            public boolean isEntityDocSimEnabled()
-            {
-                return isEntityDocSimEnabled;
-            }
-
-          public boolean isEntityDegreeEnabled()
-         {
-             return isEntityDegree;
-         }
-
          public boolean isEntityFreqEnabled() { return isEntityFreq;}
 
          public Integer getEcmqenum() { return  ecmqenum; }
@@ -365,6 +276,11 @@ public class RegisterCommands
          public boolean isEntityRelationEnabled()
          {
              return isEntityRelationEnabled;
+         }
+
+         public boolean isEntityRelationParaRunFileEnabled()
+         {
+             return isEntityRelationParaRunFileEnabled;
          }
 
          public boolean isEntityRanklibEnabled()
