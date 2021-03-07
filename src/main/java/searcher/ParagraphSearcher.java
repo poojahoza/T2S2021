@@ -67,6 +67,8 @@ public class ParagraphSearcher{
 
     private void createRankingQueryDocPair(String outer_key, String inner_key, Container rank)
     {
+        System.out.println(ranks);
+        System.out.println(outer_key);
         if(ranks.containsKey(outer_key))
         {
             Map<String, Container> extract = ranks.get(outer_key);
@@ -107,7 +109,7 @@ public class ParagraphSearcher{
         for(Map.Entry<String, Map<String, Object>> q:rankings.entrySet()) {
             for(Map.Entry<String,Object> p:q.getValue().entrySet())
             {
-                System.out.println(p.getValue().getClass().getName());
+                //System.out.println(p.getValue().getClass().getName());
                 List<String> para_details = (List<String>) p.getValue();
                 this.runRanking(p.getKey(), q.getKey(), para_details.get(0), para_details.get(1));
             }
