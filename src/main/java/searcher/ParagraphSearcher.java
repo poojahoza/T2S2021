@@ -30,6 +30,7 @@ public class ParagraphSearcher{
     public ParagraphSearcher(String indexLoc) throws IOException{
         searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(Paths.get(indexLoc))));
         parser = new QueryParser("Id", new EnglishAnalyzer());
+        if(ranks==null) this.ranks= new LinkedHashMap<String, Map<String, Container>>();
     }
 
     public TopDocs performSearch(String paraid, int n)
@@ -67,8 +68,8 @@ public class ParagraphSearcher{
 
     private void createRankingQueryDocPair(String outer_key, String inner_key, Container rank)
     {
-        System.out.println(ranks);
-        System.out.println(outer_key);
+        /*System.out.println(ranks);
+        System.out.println(outer_key);*/
         if(ranks.containsKey(outer_key))
         {
             Map<String, Container> extract = ranks.get(outer_key);
