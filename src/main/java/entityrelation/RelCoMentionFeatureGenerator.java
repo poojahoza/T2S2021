@@ -268,8 +268,8 @@ public class RelCoMentionFeatureGenerator {
             entities_ids[i] = entities_array.get(i);
         }
 
-        databaseWrapper dbwrapper = new databaseWrapper();
-        Map<String, String[]> entities_details = dbwrapper.getRecordDetails(entities_ids);
+        //databaseWrapper dbwrapper = new databaseWrapper();
+        //Map<String, String[]> entities_details = dbwrapper.getRecordDetails(entities_ids);
 
         //System.out.println(cursor.length());
         int entity_length = entities_ids.length;
