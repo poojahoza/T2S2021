@@ -107,6 +107,7 @@ public class ParagraphSearcher{
         for(Map.Entry<String, Map<String, Object>> q:rankings.entrySet()) {
             for(Map.Entry<String,Object> p:q.getValue().entrySet())
             {
+                System.out.println(p.getValue().getClass().getName());
                 List<String> para_details = (ArrayList) p.getValue();
                 this.runRanking(p.getKey(), q.getKey(), para_details.get(0), para_details.get(1));
             }
